@@ -34,6 +34,7 @@ for i in sumBits:
 print(int(gamma,2)*int(epsilon,2))
 print(time.time() - start)
 
+
 #Part B
 start = time.time()
 
@@ -70,12 +71,5 @@ for i in range(0,len(inputList[0])):
     cosList = newCosList
     if len(cosList) == 1: break
 
-
-print(int(oxrList[0],2))
-print(int(cosList[0],2))
-
 print(int(cosList[0],2) * int(oxrList[0],2))
-
-
-
 print(time.time() - start)
