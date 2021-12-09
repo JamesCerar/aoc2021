@@ -17,8 +17,6 @@ def makeBasin(array,row,col,n):
     neighbours = [[-1,0],[0,-1],[0,1],[1,0]]
     n.add((row,col))
     for i in neighbours:
-        if col+i[1] > 102:
-            print('stop')
         newRow, newCol = row + i[0], col + i[1]
         if (newRow,newCol) not in n and array[newRow][newCol] == '0':
             newN = makeBasin(array,newRow,newCol,n)
@@ -27,7 +25,7 @@ def makeBasin(array,row,col,n):
 
 
      
-#Part A - find low points
+#Part B - find basins
 start = time.time()
 
 inputList = importData()
@@ -35,33 +33,37 @@ inputList = importData()
 #adding buffer rows and columns to top/bottom/sides
 numRows = len(inputList) + 2
 numCols = len(inputList[0]) + 2
-bufferRow = '$' * numCols
+bufferRow = '.' * numCols
 
 bufferedMap = []
 bufferedMap.append(bufferRow)
 for row in inputList:
     for i in range(0,9):
         row = row.replace(str(i),'0')
-    bufferedMap.append('$'+row.replace('9','$')+'$')
+    bufferedMap.append('.'+row.replace('9','.')+'.')
 bufferedMap.append(bufferRow)
 
 
 #make basin map
 allBasins = []
+alphaNum = 0
 for rowNum in range(0,numRows):
     for colNum in range(0,numCols):
         if bufferedMap[rowNum][colNum] == '0':
+            alphaNum+=1
+            curLetter = chr(ord('a')+alphaNum%24-1)
             newBasin = makeBasin(bufferedMap,rowNum,colNum,set())
             allBasins.append(len(newBasin))
             for i in newBasin:
-                bufferedMap[i[0]] = bufferedMap[i[0]][:i[1]] + '.' + bufferedMap[i[0]][i[1]+1:]
+                bufferedMap[i[0]] = bufferedMap[i[0]][:i[1]] + curLetter + bufferedMap[i[0]][i[1]+1:]
                 
 
 
 #create list of basin sizes
 allBasins.sort(reverse=True)
 
-print(allBasins[0]*allBasins[1]*allBasins[2])
-            
+for i in bufferedMap:
+    print(i)
 
+print(allBasins[0]*allBasins[1]*allBasins[2])
 print(time.time() - start)
